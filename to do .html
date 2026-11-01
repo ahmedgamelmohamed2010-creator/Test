@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>to do list pro</title>
+  <style>
+    
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background-image: linear-gradient(135deg, #071920, #062835, #053446, #06455c, #085b79);
+    }
+
+    button{
+      font-size: 22px;
+      font-weight: 900;
+      text-align: center;
+      padding: 10px;
+      color: #eee;
+      background: black;
+      border-radius: 14px;
+      border: 2px solid black;
+      margin: 10px;
+    }
+
+    nav{
+      display: flex;
+      align-content: start;
+      width: 100%;
+      margin: 10px;
+    }
+
+    section{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-direction: column;
+      padding: 20px;
+      border: 2px solid black;
+      border-radius: 14px;
+      margin: 20px;
+      width: 90%;
+      height: 300px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .input_box{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    input{
+      width: 500px;
+      background: black;
+      color: #eee;
+      text-align: center;
+      border: 2px solid black;
+      border-radius: 14px;
+      margin: 10px;
+      height: 40px;
+      font-size: 22px;
+      font-weight: 900;
+      outline: none;
+    }
+
+    label{
+      font-size: 30px;
+    }
+
+    .action{
+      background-image: linear-gradient(320deg, #eb92be, #ffef78, #63c9b4);
+    }
+
+    .alert_cover{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      pointer-events: auto;
+    }
+
+    .input_search_par{
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      transform: translate(50%, 50%);
+      z-index: 999;
+      background: #0b3b44;
+      color: white;
+      width: 50%;
+      height: 40%;
+      border: 2px solid black;
+      border-radius: 14px;
+      box-shadow: 10px 20px 50px 0 rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      overflow-y: scroll; 
+  }
+
+      .research{
+        font-size: 15px;
+        font-weight: 900;
+        width: 70px;
+        height: 50px;
+      }
+
+    #value{
+      text-align: center;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    #search_input{
+      width: 98%;
+    }
+
+    span{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    
+    <button class="change">الوضع النهاري</button>
+
+    <button class="search">بحث</button>
+
+  </nav>
+
+  <div class="alert_cover" style="display: none;"></div>
+
+    <div class="input_search_par"style="display: none;">
+
+      <span>
+        
+        <label for="search_input">ادخل ما تريد البحث عنه : </label>
+        <input type="text" id="search_input">
+        
+      </span>
+      
+      <button class="research">بحث</button>
+
+      <div id="value"></div>
+      
+    </div>
+  
+  <section>
+    
+    <h1>To Do List pro</h1>
+
+    <div class="input_box">  
+
+    <label for="input">ادخل المهمه التي تريد اضافتها : </label>
+
+    <input id="input" type="text">
+
+    </div>
+
+    <button class="add_task">Add Task</button>
+    
+  </section>
+
+  <div class="tasks">
+
+    <div class="to_do"></div>
+    
+    <div class="end"></div>
+
+    <div class="comp"></div>
+    
+  </div>
+
+  <script>
+    //=====================المتغرات العامه للموقع================
+    let task = ["الذهاب للعمل", "الذهاب للنادي"];
+    //===================================================
+    
+    //---------------------زرار الوضع الليلي--------------------
+    
+    if (localStorage.getItem("color_main")){
+      if (localStorage.getItem("color_main") === "action"){
+        document.querySelector("body").classList.add("action");
+        document.querySelector(".change").textContent = "الوضع الليلي";
+      } 
+    }
+    
+    document.querySelector(".change").addEventListener("click", () => {
+
+      if (document.querySelector("body").classList.contains("action")){
+        
+        document.querySelector("body").classList.remove("action");
+        localStorage.setItem("color_main", "body");
+        document.querySelector(".change").textContent = "الوضع النهاري"
+        
+      } 
+      else {
+        
+        document.querySelector("body").classList.add("action");
+        localStorage.setItem("color_main", "action");
+        document.querySelector(".change").textContent = "الوضع الليلي"
+      }
+      
+    });
+
+    //---------------------نهاية كود الوضع الليلي----------------
+
+    //---------------------زرار البحث------------------------
+    
+    const search = document.querySelector(".search");
+    const alert_cover = document.querySelector(".alert_cover");
+    const input_search_par= document.querySelector(".input_search_par");
+    const research = document.querySelector(".research");
+    const search_input = document.querySelector("#search_input");
+
+    search.addEventListener("click", () => {
+      alert_cover.style.display = "flex";
+      input_search_par.style.display = "flex";
+    });
+
+    search_input.addEventListener("input", (ele) => {
+      
+       let search_value = ele.target.value.trim();
+       let order = task.find(task => task.includes(search_value));
+
+      if(order){
+
+        document.querySelector("#value").textContent = ("نتائج البحث : \n " + order);
+      }
+      else {
+        document.querySelector("#value").textContent = ("نتائج البحث : \n غير موجوده بقائمه المهام ");
+      }
+      
+    });
+
+    research.addEventListener("click", () => {
+      alert_cover.style.display = "none";
+      input_search_par.style.display = "none";
+      search_input.value = "";
+      document.querySelector("#value").textContent = "";
+    });
+    //---------------------نهاية زرار البحث--------------------
+  </script>
+  
+</body>
+</html>
